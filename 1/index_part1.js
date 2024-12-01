@@ -31,13 +31,7 @@ leftList = leftList.sort(numSort)
 rightList = rightList.sort(numSort)
 
 for (let i = 0; i < leftList.length; i++) {
-  let diff = leftList[i] - rightList[i]
-
-  if (diff < 0) {
-    diff = diff * -1
-  }
-
-  retVal = retVal + diff
+  retVal = retVal + Math.abs(leftList[i] - rightList[i])
 }
 
 console.log("Result: " + retVal.toString())
