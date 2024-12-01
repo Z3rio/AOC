@@ -17,18 +17,8 @@ for (let i = 0; i < lines.length; i++) {
   }
 }
 
-const numSort = (a, b) => {
-  if (a < b) {
-    return -1
-  } else if (a > b) {
-    return 1
-  }
-
-  return 0
-}
-
-leftList = leftList.sort(numSort)
-rightList = rightList.sort(numSort)
+leftList = leftList.sort()
+rightList = rightList.sort()
 
 for (let i = 0; i < leftList.length; i++) {
   retVal = retVal + Math.abs(leftList[i] - rightList[i])
