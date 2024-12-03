@@ -7,53 +7,48 @@ const lines = readFileSync(path.join(cwd, "data.txt")).toString().trim().split(/
 let retVal = 0
 let directions = ["increasing", "decreasing"]
 
-for (let lI = 0; lI < lines.length; lI++) {
-  const numbers = lines[lI].split(/\s/g).map((v) => parseInt(v))
-  let isSafe = false
-
+function isReportSafe(numbers) {
   // check both incrasing and decreasing directions
-  for (let dI = 0; dI < directions.length; dI++) {
-    let hasSkipped = false
-    let lastNumber = null
-    let cachedIsSafe = true
-    const direction = directions[dI]
+  for (const direction of directions) {
+    let lastNumber = numbers[0]
+    let valid = true
 
     // we can set initial number index to 1, as idx 0 is the initial lastNumber value
-    for (let nI = 0; nI < numbers.length; nI++) {
+    for (let nI = 1; nI < numbers.length; nI++) {
       const dist = Math.abs(lastNumber - numbers[nI])
 
       if (
-        lastNumber !== null &&
-        (
-          dist > 3 || dist < 1 ||
-          (direction === "increasing" && lastNumber > numbers[nI]) ||
-          (direction === "decreasing" && lastNumber < numbers[nI])
-        )
+        dist > 3 || dist < 1 ||
+        (direction === "increasing" && lastNumber > numbers[nI]) ||
+        (direction === "decreasing" && lastNumber < numbers[nI])
       ) {
-        // number is bad
-
-        if (hasSkipped === true) {
-          // if bad number has already been skipped once, then the sequence is bad
-          cachedIsSafe = false
-          break
-        } else {
-          hasSkipped = true
-        }
-      } else {
-        // only update last number if number was "good"
-        lastNumber = numbers[nI]
+        valid = false
+        // dont continue checking numbers if invalid
+        break
       }
+
+      lastNumber = numbers[nI]
     }
 
-    if (cachedIsSafe === true) {
-      isSafe = true
-      // if cached is safe is true for either direction, no more checking is needed
-      break
+    // only one direction has to be valid
+    if (valid === true) {
+      return true
     }
   }
 
-  if (isSafe == true) {
-    retVal = retVal + 1
+  return false
+}
+
+for (let lI = 0; lI < lines.length; lI++) {
+  const numbers = lines[lI].split(/\s/g).map(Number)
+
+  // initial idx is set to -1 to account for testing with no numbers removed
+  for (let i = -1; i < numbers.length; i++) {
+    const modifiedNumbers = [...numbers.slice(0, i), ...numbers.slice(i + 1)];
+    if (isReportSafe(modifiedNumbers)) {
+      retVal = retVal + 1
+      break;
+    }
   }
 }
 

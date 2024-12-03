@@ -7,7 +7,7 @@ const lines = readFileSync(path.join(cwd, "data.txt")).toString().trim().split(/
 let retVal = 0
 
 for (let i = 0; i < lines.length; i++) {
-  const numbers = lines[i].split(/\s/g).map((v) => parseInt(v))
+  const numbers = lines[i].split(/\s/g).map(Number)
   let isSafe = true
   let lastNumber = null
   let direction = null
